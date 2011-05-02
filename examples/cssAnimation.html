@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<title>Timeline.js</title>     
+<style type="text/css">  
+html,body {
+	height: 98%;  
+	margin: 0;    
+}
+      
+div {	
+	overflow: hidden;
+}      
+
+h1 {
+	margin-left: 0.5em;
+}     
+
+#canvas {
+	margin-left: 1em;
+}
+
+
+</style>
+<script type="text/javascript" src="../src/timeline.js"></script>   
+<script type="text/javascript" src="../src/gui.js"></script>
+<script type="text/javascript" src="js/RequestAnimationFrame.js"></script>
+<script type="text/javascript"> 
+
+function init() {	
+	var rectangles = [];
+	
+	for(var i=0; i<4; i++) {
+		var id = "rect" + i;
+		rectangles.push({ 			
+			x: 200,
+			y: 200,
+			width: 50,
+			height: 50,
+			rotation: 0,
+			element: document.getElementById(id)
+		})
+	}        
+	
+	anim("rectangles[0]",rectangles[0]).to({"x":100},0).to({"x":200},1.0290566037735849, Timeline.Easing.Cubic.EaseOut);
+	anim("rectangles[0]",rectangles[0]).to({"y":100},0).to({"y":200},1.0290566037735849, Timeline.Easing.Cubic.EaseOut).to({"y":200},0.9679245283018867).to({"y":200},0.2852830188679245).to({"y":-50},0.7233962264150944, Timeline.Easing.Quadratic.EaseIn);
+	anim("rectangles[0]",rectangles[0]).to({"rotation":0},0).to({"rotation":90},1.0188679245283019, Timeline.Easing.Cubic.EaseOut);
+	anim("rectangles[1]",rectangles[1]).to({"x":350},0).to({"x":250},1.0290566037735849, Timeline.Easing.Cubic.EaseOut);
+	anim("rectangles[1]",rectangles[1]).to({"y":100},0).to({"y":200},1.0188679245283019, Timeline.Easing.Cubic.EaseOut).to({"y":200},0.9781132075471697).to({"y":200},0.49924528301886784).to({"y":-50},0.6724528301886794, Timeline.Easing.Quadratic.EaseIn);
+	anim("rectangles[1]",rectangles[1]).to({"rotation":0},0).to({"rotation":-90},1.0188679245283019, Timeline.Easing.Cubic.EaseOut);
+	anim("rectangles[2]",rectangles[2]).to({"x":100},0).to({"x":200},1.0086792452830189, Timeline.Easing.Cubic.EaseOut);
+	anim("rectangles[2]",rectangles[2]).to({"y":350},0).to({"y":250},1.0086792452830189, Timeline.Easing.Cubic.EaseOut).to({"y":250},0.9883018867924527).to({"y":250},0.8252830188679245).to({"y":-50},0.601132075471698, Timeline.Easing.Quadratic.EaseIn);
+	anim("rectangles[2]",rectangles[2]).to({"rotation":0},0).to({"rotation":90},1.0086792452830189, Timeline.Easing.Cubic.EaseOut);
+	anim("rectangles[3]",rectangles[3]).to({"x":350},0).to({"x":250},1.0086792452830189, Timeline.Easing.Cubic.EaseOut);
+	anim("rectangles[3]",rectangles[3]).to({"y":350},0).to({"y":250},1.0086792452830189, Timeline.Easing.Cubic.EaseOut).to({"y":250},0.9883018867924527).to({"y":250},1.1105660377358493).to({"y":-50},0.621509433962264, Timeline.Easing.Quadratic.EaseIn);
+	anim("rectangles[3]",rectangles[3]).to({"rotation":0},0).to({"rotation":90},0.9984905660377358, Timeline.Easing.Cubic.EaseOut);
+	
+   
+	Timeline.getGlobalInstance().loop(-1); //loop forever
+	
+	function draw() {                   
+		for(var i=0; i<4; i++) {   
+			var rect = rectangles[i];                  
+			rect.element.style.background = "#FF0000";
+			rect.element.style.position = "absolute";
+			rect.element.style.left = rect.x + "px";
+			rect.element.style.top = rect.y + "px";
+			rect.element.style.width = rect.width + "px";
+			rect.element.style.height = rect.height + "px";  
+			rect.element.style["-webkit-transform"] = "rotate(" + rect.rotation + "deg)"; 
+			rect.element.style["-moz-transform"] = "rotate(" + rect.rotation + "deg)"; 
+			rect.element.style["-o-transform"] = "rotate(" + rect.rotation + "deg)"; 
+		}
+		requestAnimationFrame(draw, document.body);		
+	}
+	
+	draw();
+}   
+
+window.onload = init;
+
+</script>	  
+</head>
+<body>    
+	<h1>Timeline.js - Bouncing rectangles</h1>            
+	<div id="rect0"></div>	 	
+	<div id="rect1"></div>	 
+	<div id="rect2"></div>	 
+	<div id="rect3"></div>	 
+</body>
+</html>
