@@ -1,0 +1,9 @@
+WISHLIST                
+- keyboard shortcuts
+- snapping  
+- collapsing object tracks
+- object 'enabled' markers in the object track for easy 
+  scalling/dragging all it's keys
+- anim() taking easing param as a function OR a string
+- named timelines                                 
+- <audio> tag sync

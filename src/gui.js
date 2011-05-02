@@ -1,24 +1,6 @@
 //  Timeline.js v0.1 / 2011-05-01       
 //  A compact JavaScript animation library with a GUI timeline for fast editing.
 //  by Marcin Ignac (http://marcinignac.com) 
-//
-//  GUI module
-//
-//  TODO      
-//  - time slider
-//  
-//  WISHLIST                
-//  - keyboard shortcuts
-//  - snapping  
-//  - collapsing object tracks
-//  - object 'enabled' markers in the object track for easy scalling/dragging all it's keys
-//  - anim() taking easing param as a function OR a string
-//  - named timelines                                 
-//  - Timeline.anim so we can have multiple timelines 
-//  - <audio> tag sync
-//  
-//  ISSUES     
-//  - 
 //  
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
