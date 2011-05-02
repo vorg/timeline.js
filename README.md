@@ -5,7 +5,7 @@ by Marcin Ignac (http://marcinignac.com)
 
 More on project website (http://marcinignac.com/blog/timeline-js)
 
-![Timeline](http://http://vorg.github.com/timeline.js/screenshots/timeline.png)]
+![Timeline](http://vorg.github.com/timeline.js/screenshots/timeline.png)
 
 ## Usage:
 
