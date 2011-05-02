@@ -1,8 +1,11 @@
 # Timeline.js
 
 A compact JavaScript animation library with a GUI timeline for fast editing.
+by Marcin Ignac (http://marcinignac.com)                                    
 
-by Marcin Ignac (http://marcinignac.com) 
+More on project website (http://marcinignac.com/blog/timeline-js)
+
+![Timeline](http://http://vorg.github.com/timeline.js/screenshots/timeline.png)]
 
 ## Usage:
 
@@ -21,9 +24,7 @@ anim() on the same target again.
 Animate x property of the sprite object to 100 over 1s using 
 quadratic easing. Then wait 5s and animate it back to 0 over 2s  
 
-	anim(sprite)
-		.to({x:100}, 1, Timeline.Easing.Quadratic.EaseIn)
-		.to(5, {x:0}, 2);
+	anim(sprite).to({x:100}, 1, Timeline.Easing.Quadratic.EaseIn).to(5, {x:0}, 2);
 
 ### 1.2 Example of parallel animations
 
@@ -37,8 +38,7 @@ At the same time animate opacity to 0 over 4s.
 
 	<script type="text/javascript" src="timeline/gui.js"></script>   
 
-	anim(targetName, target)
-		.to(delay, {property:value,...}, duration, easing);
+	anim(targetName, target).to(delay, {property:value,...}, duration, easing);
 
 In this case we have to specify targetName in anim() that will be
 used when we export the code from the timeline GUI. For each property 
