@@ -2,7 +2,7 @@
 
 A compact JavaScript animation library with a GUI timeline for fast editing.
 
-More on project website: [http://marcinignac.com/blog/timeline-js]
+More on project website: http://marcinignac.com/blog/timeline-js
 
 Created by Marcin Ignac
 
