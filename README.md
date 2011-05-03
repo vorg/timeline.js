@@ -1,7 +1,8 @@
 # Timeline.js
 
 A compact JavaScript animation library with a GUI timeline for fast editing.
-
+                    
+Check it out in this example: http://vorg.github.com/timeline.js/examples/cssAnimation.html
 More on project website: http://marcinignac.com/blog/timeline-js/
 
 Created by Marcin Ignac
