@@ -4,7 +4,7 @@ A compact JavaScript animation library with a GUI timeline for fast editing.
                     
 Check it out in this example: http://vorg.github.com/timeline.js/examples/cssAnimation.html
 
-More on project website: http://marcinignac.com/blog/timeline-js/
+More on the project website: http://marcinignac.com/blog/timeline-js/
 
 Created by Marcin Ignac
 
@@ -18,7 +18,7 @@ Created by Marcin Ignac
    
 	anim(target).to(delay, {property:value,...}, duration, easing);    
 
-After specyfing target using anim() you can chain as many to() 
+After specifying the target using anim() you can chain as many to() 
 animations as you want. To start parallel track simply call 
 anim() on the same target again.
 
@@ -45,7 +45,7 @@ At the same time animate opacity to 0 over 4s.
 	
 Adding gui.js script to the page will open a timeline panel on the 
 bottom of the page if any animation was added before first frame. One
-track for evey animated property will be created. Click and drag to 
+track for every animated property will be created. Click and drag to 
 edit key frames, double click to add new frames. Press export button 
 (tree horizontal lines) to export code you can then copy paste in
 your scrip	.   
@@ -54,7 +54,7 @@ In this case we have to specify targetName in anim() that will be
 used when we export the code from the timeline GUI. For each property 
 used in to() call there will be an animation track created. Animation
 data is stored in localStorage and shared between sessions so 
-refresing the page and adding new properties and objects to be 
+refreshing the page and adding new properties and objects to be 
 animated is possible. When an animation track exists in localStorage 
 all to() calls modifying this property are ignored.   
 
