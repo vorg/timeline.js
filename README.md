@@ -14,7 +14,7 @@ Created by Marcin Ignac
 
 ### 1. Animation
    
-<script type="text/javascript" src="timeline/timeline.js"></script>   
+	<script type="text/javascript" src="timeline/timeline.js"></script>   
    
 	anim(target).to(delay, {property:value,...}, duration, easing);    
 
