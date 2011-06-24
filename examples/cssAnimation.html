@@ -58,7 +58,8 @@ function init() {
 	
    
 	Timeline.getGlobalInstance().loop(-1); //loop forever
-	
+	Timeline.getGlobalInstance().start();
+
 	function draw() {                   
 		for(var i=0; i<4; i++) {   
 			var rect = rectangles[i];                  
@@ -74,7 +75,7 @@ function init() {
 		}
 		requestAnimationFrame(draw, document.body);		
 	}
-	
+
 	draw();
 }   
 

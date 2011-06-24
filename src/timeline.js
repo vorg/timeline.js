@@ -56,7 +56,7 @@ Timeline.prototype.play = function() {
 Timeline.prototype.start = function() {
     var self = this;
     setInterval(function() {
-        self.update(Math.floor(1000/30.0));
+        self.update(1.0/30.0);
     }, 1000/30);
 };
 
@@ -110,9 +110,15 @@ Timeline.prototype.applyValues = function() {
         //if start time happened during last frame
         if (this.prevTime <= propertyAnim.startTime && propertyAnim.startTime <= this.time) {
             propertyAnim.startValue = propertyAnim.target[propertyAnim.propertyName];
+            if (propertyAnim.startFunction) {
+                propertyAnim.startFunction.call(propertyAnim.target);
+            }
         }
         if (this.prevTime <= propertyAnim.endTime && propertyAnim.endTime <= this.time) {                 
             propertyAnim.target[propertyAnim.propertyName] = propertyAnim.endValue;
+            if (propertyAnim.endFunction) {
+                propertyAnim.endFunction.call(propertyAnim.target);
+            }
             continue;
         }
         if (propertyAnim.endTime - propertyAnim.startTime === 0) {
@@ -127,7 +133,7 @@ Timeline.prototype.applyValues = function() {
 
 //--------------------------------------------------------------------
 
-function Anim(name, target, timeline) {   
+function Anim(name, target, timeline, startFunction, endFunction) {   
     this.startTime = 0;
     this.endTime = 0;   
     this.time = 0;
@@ -136,7 +142,10 @@ function Anim(name, target, timeline) {
     this.name = name;
     this.target = target;
     this.timeline = timeline;
-} 
+
+    this.startAnimation = startFunction;
+    this.endAnimation = endFunction;
+}
 
 //delay, properties, duration, easing
 Anim.prototype.to = function() {  
@@ -148,7 +157,9 @@ Anim.prototype.to = function() {
     var properties;
     var duration;
     var easing;       
-    
+    var startFunc;
+    var endFunc;
+
     if (typeof(args[0]) == "number") {    
         delay = args.shift();
     }                      
@@ -162,6 +173,14 @@ Anim.prototype.to = function() {
     else {
         properties = {};
     }                  
+
+    if (typeof(args[0]) == "function") {
+        startFunc = args.shift();    
+    }                   
+
+    if (typeof(args[0]) == "function") {
+        endFunc = args.shift();    
+    }                   
     
     if (typeof(args[0]) == "number") {
         duration = args.shift();
@@ -187,7 +206,9 @@ Anim.prototype.to = function() {
             delay: delay,
             startTime: this.timeline.time + delay + this.endTime,
             endTime: this.timeline.time + delay + this.endTime + duration,
-            easing: easing
+            easing: easing,
+            endFunction: endFunc,
+            startFunction: startFunc
         });
     }
     this.endTime += delay + duration;
@@ -202,7 +223,6 @@ function anim(targetName, targetObject, parentTimeline) {
     var name;
     var target; 
     var timeline;   
-    
     if (typeof(args[0]) == "string") {   
         name = args.shift();     
     }         
@@ -212,14 +232,14 @@ function anim(targetName, targetObject, parentTimeline) {
     }                   
     else {
         target = {};
-    } 
+    }
     
     if (typeof(args[0]) == "object") {
         timeline = args.shift();    
     }                   
     else {
         timeline = Timeline.getGlobalInstance();
-    }              
+    }
     
     var localanim = new Anim(name, target, timeline);
     return localanim;

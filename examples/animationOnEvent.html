@@ -50,6 +50,7 @@ function init() {
 	canvas.addEventListener("click", onClick, false);
 	canvas.addEventListener("dblclick", onDoubleClick, false);	
 	
+	Timeline.getGlobalInstance().start();
 	draw();
 }   
 
