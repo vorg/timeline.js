@@ -10,7 +10,9 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-var Timeline = function() {    
+var Timeline = function( parameters ) {
+  this.parameters = parameters || {};
+  
   this.name = "Global";
   this.anims = [];   
 	this.time = 0;      
