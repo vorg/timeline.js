@@ -19,9 +19,10 @@ var Timeline = function() {
 	this.loopMode = 0;
 	this.playing = true;
 	var self = this;
+  var fps = 30;
 	setInterval(function() {
-    self.update();
-	}, 1000/30);
+    self.update(1/fps);
+	}, 1000/fps);
 };
 
 Timeline.currentInstance = null;
@@ -60,13 +61,13 @@ Timeline.prototype.preUpdate = function() {
   //placeholder for hooks like GUI rendering
 };
 
-Timeline.prototype.update = function() {
+Timeline.prototype.update = function(deltaTime) {
   this.preUpdate();
 
   if (this.playing) {
-    this.totalTime += 1/30;
+    this.totalTime += deltaTime;
     this.prevTime = this.time;
-    this.time += 1/30;
+    this.time += deltaTime;
   }
 
   if (this.loopMode !== 0) {
