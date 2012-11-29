@@ -121,6 +121,13 @@ Timeline.prototype.applyValues = function() {
     t = Math.max(0, Math.min(t, 1));
 		t = propertyAnim.easing(t);
 		propertyAnim.target[propertyAnim.propertyName] = propertyAnim.startValue + (propertyAnim.endValue - propertyAnim.startValue) * t;
+
+    if (t == 1) {
+      if (this.loopMode == 0) {
+        this.anims.splice(i, 1);
+        i--;
+      }
+    }
 	}
 };
 
