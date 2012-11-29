@@ -19,13 +19,11 @@ var Timeline = function() {
 	this.loopMode = 0;
 	this.playing = true;
 	var self = this;
-  var fps = 30;
-	setInterval(function() {
-    self.update(1/fps);
-	}, 1000/fps);
+  this.fps = 30;
+	this.loopInterval = setInterval(function() {
+    self.update();
+	}, 1000/this.fps);
 };
-
-Timeline.currentInstance = null;
 
 Timeline.getGlobalInstance = function() {
 	if (!Timeline.globalInstance) {
@@ -61,6 +59,16 @@ Timeline.prototype.preUpdate = function() {
 };
 
 Timeline.prototype.update = function(deltaTime) {
+  if (deltaTime !== undefined) {
+    if (this.loopInterval !== 0) {
+      clearInterval(this.loopInterval);
+      this.loopInterval = 0;
+    }
+  }
+  else {
+    deltaTime = 1 / this.fps;
+  }
+
   this.preUpdate();
 
   if (this.playing) {
