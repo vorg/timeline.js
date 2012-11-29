@@ -46,7 +46,6 @@ Timeline.prototype.loop = function(n) {
 Timeline.prototype.stop = function() {
   this.playing = false;
   this.time = 0;
-  this.prevTime = this.time - 1/30; //FIXME 1/30
 };
 
 Timeline.prototype.pause = function() {
@@ -66,7 +65,6 @@ Timeline.prototype.update = function(deltaTime) {
 
   if (this.playing) {
     this.totalTime += deltaTime;
-    this.prevTime = this.time;
     this.time += deltaTime;
   }
 
@@ -75,6 +73,9 @@ Timeline.prototype.update = function(deltaTime) {
     if (this.time > animationEnd) {
       this.loopCount++;
       this.time = 0;
+      for(var i=0; i<this.anims.length; i++) {
+        this.anims[i].hasStarted = false;
+      }
     }
     if (this.loopMode == -1) {
       //loop infinitely
@@ -105,20 +106,12 @@ Timeline.prototype.applyValues = function() {
 		if (this.time < propertyAnim.startTime) {
 			continue;
 		}
-		//if start time happened during last frame
-		if (this.prevTime <= propertyAnim.startTime && propertyAnim.startTime <= this.time) {
+    if (this.time > propertyAnim.startTime && !propertyAnim.hasStarted) {
       propertyAnim.startValue = propertyAnim.target[propertyAnim.propertyName];
-		}
-		if (this.prevTime <= propertyAnim.endTime && propertyAnim.endTime <= this.time) {
-      propertyAnim.target[propertyAnim.propertyName] = propertyAnim.endValue;
-			continue;
-		}
-    if (propertyAnim.endTime - propertyAnim.startTime === 0) {
-      continue;
-		}
+    }
 		var t = (this.time - propertyAnim.startTime)/(propertyAnim.endTime - propertyAnim.startTime);
+    t = Math.max(0, Math.min(t, 1));
 		t = propertyAnim.easing(t);
-		t = Math.max(0, Math.min(t, 1));
 		propertyAnim.target[propertyAnim.propertyName] = propertyAnim.startValue + (propertyAnim.endValue - propertyAnim.startValue) * t;
 	}
 };
@@ -130,7 +123,6 @@ function Anim(name, target, timeline) {
 	this.endTime = 0;
 	this.time = 0;
 	this.propertyAnims = [];
-
 	this.name = name;
 	this.target = target;
 	this.timeline = timeline;
@@ -177,6 +169,7 @@ Anim.prototype.to = function() {
 
 	for(var propertyName in properties) {
 		this.timeline.anims.push({
+      hasStarted: false,
       timeline: this.timeline,
       targetName: this.name,
       target: this.target,
