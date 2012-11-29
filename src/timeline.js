@@ -87,6 +87,9 @@ Timeline.prototype.update = function(deltaTime) {
     }
     if (this.loopMode == -1) {
       //loop infinitely
+      for(var i=0; i<this.anims.length; i++) {
+        this.anims[i].hasStarted = false;
+      }
     }
     else {
       if (this.loopCount >= this.loopMode) {
