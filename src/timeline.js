@@ -1,6 +1,6 @@
-//  Timeline.js v0.1 / 2011-05-01       
+//  Timeline.js v0.1 / 2011-05-01
 //  A compact JavaScript animation library with a GUI timeline for fast editing.
-//  by Marcin Ignac (http://marcinignac.com) 
+//  by Marcin Ignac (http://marcinignac.com)
 //
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -10,28 +10,28 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-var Timeline = function() {    
+var Timeline = function() {
   this.name = "Global";
-  this.anims = [];   
-	this.time = 0;      
-	this.totalTime = 0; 
-	this.loopCount = 0;	
-	this.loopMode = 0;	 
+  this.anims = [];
+	this.time = 0;
+	this.totalTime = 0;
+	this.loopCount = 0;
+	this.loopMode = 0;
 	this.playing = true;
-	var self = this;   
+	var self = this;
 	setInterval(function() {
-	  self.update();
+    self.update();
 	}, 1000/30);
-}   
+};
 
-Timeline.currentInstance = null;     
+Timeline.currentInstance = null;
 
 Timeline.getGlobalInstance = function() {
 	if (!Timeline.globalInstance) {
 		Timeline.globalInstance = new Timeline();
-	}                                      
+	}
 	return Timeline.globalInstance;
-}    
+};
 
 //Possible values of n:
 //-1 infinite loop
@@ -40,36 +40,36 @@ Timeline.getGlobalInstance = function() {
 //>1 loop n-times
 Timeline.prototype.loop = function(n) {
   this.loopMode = n;
-}        
+};
 
 Timeline.prototype.stop = function() {
-  this.playing = false;  
-  this.time = 0;       
+  this.playing = false;
+  this.time = 0;
   this.prevTime = this.time - 1/30; //FIXME 1/30
-} 
+};
 
 Timeline.prototype.pause = function() {
-  this.playing = false;  
-} 
+  this.playing = false;
+};
 
 Timeline.prototype.play = function() {
   this.playing = true;
-}         
+};
 
 Timeline.prototype.preUpdate = function() {
   //placeholder for hooks like GUI rendering
-}
+};
 
-Timeline.prototype.update = function() {  
+Timeline.prototype.update = function() {
   this.preUpdate();
-                   
+
   if (this.playing) {
-    this.totalTime += 1/30;   
+    this.totalTime += 1/30;
     this.prevTime = this.time;
-    this.time += 1/30;  
+    this.time += 1/30;
   }
-  
-  if (this.loopMode != 0) {
+
+  if (this.loopMode !== 0) {
     var animationEnd = this.findAnimationEnd();
     if (this.time > animationEnd) {
       this.loopCount++;
@@ -77,66 +77,66 @@ Timeline.prototype.update = function() {
     }
     if (this.loopMode == -1) {
       //loop infinitely
-    }  
+    }
     else {
       if (this.loopCount >= this.loopMode) {
         this.playing = false;
       }
     }
-  }     
+  }
 
-  this.applyValues();             
-}                                            
+  this.applyValues();
+};
 
 Timeline.prototype.findAnimationEnd = function() {
-  var endTime = 0;   
+  var endTime = 0;
   for(var i=0; i<this.anims.length; i++) {
     if (this.anims[i].endTime > endTime) {
       endTime = this.anims[i].endTime;
     }
-  }             
+  }
   return endTime;
-} 
+};
 
-Timeline.prototype.applyValues = function() {  
-	for(var i=0; i<this.anims.length; i++) { 
-		var propertyAnim = this.anims[i];               			
+Timeline.prototype.applyValues = function() {
+	for(var i=0; i<this.anims.length; i++) {
+		var propertyAnim = this.anims[i];
 		if (this.time < propertyAnim.startTime) {
 			continue;
-		} 
-		//if start time happened during last frame
-		if (this.prevTime <= propertyAnim.startTime && propertyAnim.startTime <= this.time) {      		  
-		  propertyAnim.startValue = propertyAnim.target[propertyAnim.propertyName]; 
-		}                                       
-		if (this.prevTime <= propertyAnim.endTime && propertyAnim.endTime <= this.time) {      		  
-	    propertyAnim.target[propertyAnim.propertyName] = propertyAnim.endValue;   		  
-			continue;
-		}        		                                                                               
-		if (propertyAnim.endTime - propertyAnim.startTime == 0) {
-		  continue;
 		}
-		var t = (this.time - propertyAnim.startTime)/(propertyAnim.endTime - propertyAnim.startTime);					                                  			 			
+		//if start time happened during last frame
+		if (this.prevTime <= propertyAnim.startTime && propertyAnim.startTime <= this.time) {
+      propertyAnim.startValue = propertyAnim.target[propertyAnim.propertyName];
+		}
+		if (this.prevTime <= propertyAnim.endTime && propertyAnim.endTime <= this.time) {
+      propertyAnim.target[propertyAnim.propertyName] = propertyAnim.endValue;
+			continue;
+		}
+    if (propertyAnim.endTime - propertyAnim.startTime === 0) {
+      continue;
+		}
+		var t = (this.time - propertyAnim.startTime)/(propertyAnim.endTime - propertyAnim.startTime);
 		t = propertyAnim.easing(t);
-		t = Math.max(0, Math.min(t, 1));                                                                          		
-		propertyAnim.target[propertyAnim.propertyName] = propertyAnim.startValue + (propertyAnim.endValue - propertyAnim.startValue) * t;			
+		t = Math.max(0, Math.min(t, 1));
+		propertyAnim.target[propertyAnim.propertyName] = propertyAnim.startValue + (propertyAnim.endValue - propertyAnim.startValue) * t;
 	}
-}  
+};
 
 //--------------------------------------------------------------------
-    
-function Anim(name, target, timeline) {   
+
+function Anim(name, target, timeline) {
 	this.startTime = 0;
-	this.endTime = 0;   
+	this.endTime = 0;
 	this.time = 0;
 	this.propertyAnims = [];
-	            
+
 	this.name = name;
 	this.target = target;
 	this.timeline = timeline;
-} 
-                                 
+}
+
 //delay, properties, duration, easing
-Anim.prototype.to = function() {  
+Anim.prototype.to = function() {
   var args = [];
   for(var i=0; i<arguments.length; i++) {
     args.push(arguments[i]);
@@ -144,42 +144,42 @@ Anim.prototype.to = function() {
   var delay;
   var properties;
   var duration;
-  var easing;       
-  
-  if (typeof(args[0]) == "number") {    
+  var easing;
+
+  if (typeof(args[0]) == "number") {
     delay = args.shift();
-  }                      
+  }
   else {
     delay = 0;
-  }     
-                          
+  }
+
   if (typeof(args[0]) == "object") {
-    properties = args.shift();    
-  }                   
+    properties = args.shift();
+  }
   else {
     properties = {};
-  }                  
-  
+  }
+
   if (typeof(args[0]) == "number") {
     duration = args.shift();
-  }                   
+  }
   else {
     duration = 1;
-  }   
-  
+  }
+
   if (typeof(args[0]) == "function") {
-    easing = args.shift();    
-  }                   
+    easing = args.shift();
+  }
   else {
     easing = Timeline.Easing.Linear.EaseNone;
-  }           
-  
-	for(var propertyName in properties) {	  
-		this.timeline.anims.push({ 
-		  timeline: this.timeline,
-		  targetName: this.name,  
-		  target: this.target,
-			propertyName: propertyName,                   
+  }
+
+	for(var propertyName in properties) {
+		this.timeline.anims.push({
+      timeline: this.timeline,
+      targetName: this.name,
+      target: this.target,
+			propertyName: propertyName,
 			endValue: properties[propertyName],
 			delay: delay,
 			startTime: this.timeline.time + delay + this.endTime,
@@ -189,39 +189,39 @@ Anim.prototype.to = function() {
 	}
 	this.endTime += delay + duration;
 	return this;
-}      
+};
 
-function anim(targetName, targetObject, parentTimeline) { 
+function anim(targetName, targetObject, parentTimeline) {
   var args = [];
   for(var i=0; i<arguments.length; i++) {
     args.push(arguments[i]);
   }
   var name;
-  var target; 
-  var timeline;   
-  
-  if (typeof(args[0]) == "string") {   
-    name = args.shift();     
-  }         
-                          
+  var target;
+  var timeline;
+
+  if (typeof(args[0]) == "string") {
+    name = args.shift();
+  }
+
   if (typeof(args[0]) == "object") {
-    target = args.shift();    
-  }                   
+    target = args.shift();
+  }
   else {
     target = {};
-  } 
-  
+  }
+
   if (typeof(args[0]) == "object") {
-    timeline = args.shift();    
-  }                   
+    timeline = args.shift();
+  }
   else {
     timeline = Timeline.getGlobalInstance();
-  }              
-  
-  var anim = new Anim(name, target, timeline);
-   
-	return anim;
-}      
+  }
+
+  var a = new Anim(name, target, timeline);
+
+	return a;
+}
 
 //--------------------------------------------------------------------
 
@@ -229,7 +229,7 @@ Timeline.Easing = { Linear: {}, Quadratic: {}, Cubic: {}, Quartic: {}, Quintic: 
 
 Timeline.Easing.Linear.EaseNone = function ( k ) {
 	return k;
-};           
+};
 
 Timeline.Easing.Quadratic.EaseIn = function ( k ) {
 	return k * k;
@@ -259,7 +259,7 @@ Timeline.Easing.Cubic.EaseInOut = function ( k ) {
 
 Timeline.Easing.Elastic.EaseIn = function( k ) {
 	var s, a = 0.1, p = 0.4;
-	if ( k == 0 ) return 0; if ( k == 1 ) return 1; if ( !p ) p = 0.3;
+	if ( k === 0 ) return 0; if ( k == 1 ) return 1; if ( !p ) p = 0.3;
 	if ( !a || a < 1 ) { a = 1; s = p / 4; }
 	else s = p / ( 2 * Math.PI ) * Math.asin( 1 / a );
 	return - ( a * Math.pow( 2, 10 * ( k -= 1 ) ) * Math.sin( ( k - s ) * ( 2 * Math.PI ) / p ) );
@@ -267,7 +267,7 @@ Timeline.Easing.Elastic.EaseIn = function( k ) {
 
 Timeline.Easing.Elastic.EaseOut = function( k ) {
 	var s, a = 0.1, p = 0.4;
-	if ( k == 0 ) return 0; if ( k == 1 ) return 1; if ( !p ) p = 0.3;
+	if ( k === 0 ) return 0; if ( k == 1 ) return 1; if ( !p ) p = 0.3;
 	if ( !a || a < 1 ) { a = 1; s = p / 4; }
 	else s = p / ( 2 * Math.PI ) * Math.asin( 1 / a );
 	return ( a * Math.pow( 2, - 10 * k) * Math.sin( ( k - s ) * ( 2 * Math.PI ) / p ) + 1 );
@@ -275,7 +275,7 @@ Timeline.Easing.Elastic.EaseOut = function( k ) {
 
 Timeline.Easing.Elastic.EaseInOut = function( k ) {
 	var s, a = 0.1, p = 0.4;
-	if ( k == 0 ) return 0; if ( k == 1 ) return 1; if ( !p ) p = 0.3;
+	if ( k === 0 ) return 0; if ( k == 1 ) return 1; if ( !p ) p = 0.3;
         if ( !a || a < 1 ) { a = 1; s = p / 4; }
         else s = p / ( 2 * Math.PI ) * Math.asin( 1 / a );
         if ( ( k *= 2 ) < 1 ) return - 0.5 * ( a * Math.pow( 2, 10 * ( k -= 1 ) ) * Math.sin( ( k - s ) * ( 2 * Math.PI ) / p ) );
@@ -317,26 +317,26 @@ Timeline.Easing.Bounce.EaseOut = function( k ) {
 Timeline.Easing.Bounce.EaseInOut = function( k ) {
 	if ( k < 0.5 ) return Timeline.Easing.Bounce.EaseIn( k * 2 ) * 0.5;
 	return Timeline.Easing.Bounce.EaseOut( k * 2 - 1 ) * 0.5 + 0.5;
-};     
+};
 
-Timeline.easingFunctionToString = function( f ) { 
-  for(var name in Timeline.easingMap) {           
-    if (Timeline.easingMap[name] == f) {          
+Timeline.easingFunctionToString = function( f ) {
+  for(var name in Timeline.easingMap) {
+    if (Timeline.easingMap[name] == f) {
       return name;
     }
   }
-}    
+};
 
-Timeline.stringToEasingFunction = function( name ) { 
+Timeline.stringToEasingFunction = function( name ) {
   return Timeline.easingMap[name];
-}
+};
 
-Timeline.easingMap = {    
-}    
+Timeline.easingMap = {
+};
 
 for(var easingFunctionFamilyName in Timeline.Easing) {
   var easingFunctionFamily = Timeline.Easing[easingFunctionFamilyName];
-  for(var easingFunctionName in easingFunctionFamily) {   
+  for(var easingFunctionName in easingFunctionFamily) {
     Timeline.easingMap[easingFunctionFamilyName + "." + easingFunctionName] = easingFunctionFamily[easingFunctionName];
-  }  
+  }
 }
