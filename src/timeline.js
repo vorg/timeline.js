@@ -120,10 +120,10 @@ Timeline.prototype.applyValues = function() {
     if (this.time > propertyAnim.startTime && !propertyAnim.hasStarted) {
       propertyAnim.startValue = propertyAnim.target[propertyAnim.propertyName];
     }
-		var t = (this.time - propertyAnim.startTime)/(propertyAnim.endTime - propertyAnim.startTime);
+    var t = (this.time - propertyAnim.startTime)/(propertyAnim.endTime - propertyAnim.startTime);
     t = Math.max(0, Math.min(t, 1));
-		t = propertyAnim.easing(t);
-		propertyAnim.target[propertyAnim.propertyName] = propertyAnim.startValue + (propertyAnim.endValue - propertyAnim.startValue) * t;
+    t = propertyAnim.easing(t);
+    propertyAnim.target[propertyAnim.propertyName] = propertyAnim.startValue + (propertyAnim.endValue - propertyAnim.startValue) * t;
 
     if (t == 1) {
       if (this.loopMode == 0) {
@@ -131,7 +131,7 @@ Timeline.prototype.applyValues = function() {
         i--;
       }
     }
-	}
+  }
 };
 
 //--------------------------------------------------------------------
@@ -141,6 +141,7 @@ function Anim(name, target, timeline) {
 	this.endTime = 0;
 	this.time = 0;
 	this.propertyAnims = [];
+
 	this.name = name;
 	this.target = target;
 	this.timeline = timeline;
@@ -185,7 +186,7 @@ Anim.prototype.to = function() {
     easing = Timeline.Easing.Linear.EaseNone;
   }
 
-	for(var propertyName in properties) {
+  for(var propertyName in properties) {
 		this.timeline.anims.push({
       hasStarted: false,
       timeline: this.timeline,
@@ -230,9 +231,7 @@ function anim(targetName, targetObject, parentTimeline) {
     timeline = Timeline.getGlobalInstance();
   }
 
-  var a = new Anim(name, target, timeline);
-
-	return a;
+  return new Anim(name, target, timeline);
 }
 
 //--------------------------------------------------------------------
