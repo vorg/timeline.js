@@ -2,65 +2,65 @@
 <html lang="en-US">
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-<title>Timeline.js</title>    
-<script type="text/javascript" src="../src/timeline.js"></script>   
+<title>Timeline.js</title>
+<script type="text/javascript" src="../src/timeline.js"></script>
 <script type="text/javascript" src="js/RequestAnimationFrame.js"></script>
-<script type="text/javascript"> 
+<script type="text/javascript">
 
 var rect = {
-	x: 50,
-	y: 50,   
-	width: 40,
-	height: 40,
-	rotation: 0
+  x: 50,
+  y: 50,
+  width: 40,
+  height: 40,
+  rotation: 0
 };
 
-function init() {	
-	var canvas = document.getElementById("canvas");
-	var c = canvas.getContext("2d");
-	
-	function draw() { 
-		c.fillStyle = "#FFFFFF";
-		c.fillRect(0, 0, canvas.width, canvas.height);
-		 
-		c.save();
-		c.translate(rect.x, rect.y);
-		c.rotate(rect.rotation);			
-		c.fillStyle = "#FF0000";
-		c.fillRect(-rect.width/2, -rect.height/2, rect.width, rect.height);
-		c.restore();     
-			                 
-		requestAnimationFrame(draw, document.body);		
-	}      
-	
-	function onClick(event) {                                   
-		var targetX = rect.x + 100;
-		if (targetX >= canvas.width - 50) {
-			targetX = 50;
-		}      
-		anim(rect).to({x : targetX}, 1, Timeline.Easing.Cubic.EaseOut);
-	}   
-	
-	function onDoubleClick(event) {   		
-		var targetRotation = rect.rotation + Math.PI*2;
-		anim(rect).to({rotation : targetRotation}, 1, Timeline.Easing.Cubic.EaseOut);
-		event.preventDefault();
-	}
-	
-	canvas.addEventListener("click", onClick, false);
-	canvas.addEventListener("dblclick", onDoubleClick, false);	
-	
-	draw();
-}   
+function init() {
+  var canvas = document.getElementById("canvas");
+  var c = canvas.getContext("2d");
+
+  function draw() {
+    c.fillStyle = "#FFFFFF";
+    c.fillRect(0, 0, canvas.width, canvas.height);
+
+    c.save();
+    c.translate(rect.x, rect.y);
+    c.rotate(rect.rotation);
+    c.fillStyle = "#FF0000";
+    c.fillRect(-rect.width/2, -rect.height/2, rect.width, rect.height);
+    c.restore();
+
+    requestAnimationFrame(draw, document.body);
+  }
+
+  function onClick(event) {
+    var targetX = rect.x + 100;
+    if (targetX >= canvas.width - 50) {
+      targetX = 50;
+    }
+    anim(rect).to({x : targetX}, 1, Timeline.Easing.Cubic.EaseOut);
+  }
+
+  function onDoubleClick(event) {
+    var targetRotation = rect.rotation + Math.PI*2;
+    anim(rect).to({rotation : targetRotation}, 1, Timeline.Easing.Cubic.EaseOut);
+    event.preventDefault();
+  }
+
+  canvas.addEventListener("click", onClick, false);
+  canvas.addEventListener("dblclick", onDoubleClick, false);
+
+  draw();
+}
 
 window.onload = init;
 
-</script>	  
+</script>
 </head>
-<body>                 
-	<h1>Timeline.js - Animation on event</h1>
-	Click the rectangle once to make it move. <br/> 
-	Double click to make it move and spin. <br/><br/>
-	<canvas id="canvas" width="600" height="300" style="border: 1px solid black;"></canvas>	 
+<body>
+  <h1>Timeline.js - Animation on event</h1>
+  Click the rectangle once to make it move. <br/>
+  Double click to make it move and spin. <br/><br/>
+  <canvas id="canvas" width="600" height="300" style="border: 1px solid black;"></canvas>
 </body>
 </html>

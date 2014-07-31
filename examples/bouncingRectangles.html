@@ -2,102 +2,102 @@
 <html lang="en-US">
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-<title>Timeline.js</title>    
-<style type="text/css">  
+<title>Timeline.js</title>
+<style type="text/css">
 html,body {
-	height: 98%;  
-	margin: 0;    	 	
+  height: 98%;
+  margin: 0;
 }
-      
-div {	
-	overflow: hidden;
-}      
+
+div {
+  overflow: hidden;
+}
 
 h1 {
-	margin-left: 0.5em;
+  margin-left: 0.5em;
 }
 
 #canvas {
-	margin-left: 1em;
+  margin-left: 1em;
 }
 
-</style> 
-<script type="text/javascript" src="../src/timeline.js"></script>   
+</style>
+<script type="text/javascript" src="../src/timeline.js"></script>
 <script type="text/javascript" src="../src/timeline-gui.js"></script>
 <script type="text/javascript" src="js/RequestAnimationFrame.js"></script>
-<script type="text/javascript"> 
+<script type="text/javascript">
 
 function init() {
-	var canvas = document.getElementById("canvas");
-	var c = canvas.getContext("2d");
-	
-	var rect = {
-		x: 50,
-		y: 50,   
-		opacity: 1,
-		width: 40,
-		height: 40,
-		rotation: 0
-	}; 
-	
-	var rect2 = {
-		x: 150,
-		y: 50,
-		width: 40,
-		height: 40,
-		rotation: 0,
-		opacity:1
-	};        	      
-	
-	anim("rect",rect).to({"x":20},0).to({"x":110},1, Timeline.Easing.Bounce.EaseOut).to({"x":20},1, Timeline.Easing.Cubic.EaseOut);
-	anim("rect",rect).to({"rotation":0},0).to({"rotation":3.14},0.99);
-	anim("rect",rect).to(1.69,{"opacity":1},0).to({"opacity":0},0.3799999999999999, Timeline.Easing.Bounce.EaseOut).to({"opacity":1},0.20000000000000018, Timeline.Easing.Cubic.EaseOut);
-	anim("rect",rect).to({"y":50},0).to({"y":50},0.98).to({"y":100},1.02, Timeline.Easing.Cubic.EaseOut).to({"y":50},0.27, Timeline.Easing.Cubic.EaseOut);
-	anim("rect2",rect2).to({"x":150},0).to({"x":150},0.34).to({"x":300},1.2, Timeline.Easing.Cubic.EaseOut);
-	anim("rect2",rect2).to({"y":50},0).to({"y":50},0.33).to({"y":100},1.19);
-	anim("rect2",rect2).to({"width":40},0).to({"width":40},0.34).to({"width":300},1.2);
-	anim("rect2",rect2).to({"height":40},0).to({"height":40},0.34).to({"height":300},1.2);
-	anim("rect2",rect2).to({"rotation":0},0).to({"rotation":0},0.31).to({"rotation":6.28},1.22, Timeline.Easing.Cubic.EaseOut);
-	anim("rect2",rect2).to({"opacity":1},0).to({"opacity":1},0.3).to({"opacity":0},1.22, Timeline.Easing.Cubic.EaseOut).to({"opacity":0},0.52);
-	  	
+  var canvas = document.getElementById("canvas");
+  var c = canvas.getContext("2d");
 
-	Timeline.getGlobalInstance().loop(-1); //loop forever
-	
-	function draw() {    
-		var w = canvas.width;
-		var h = canvas.height;
-		   			
-		c.fillStyle = "#FFFFFF";
-		c.fillRect(0, 0, w, h);
-		    
-		c.globalAlpha = rect.opacity;     
-		c.save();
-		c.translate(rect.x, rect.y);
-		c.rotate(rect.rotation);			
-		c.fillStyle = "#FF0000";
-		c.fillRect(-rect.width/2, -rect.height/2, rect.width, rect.height);
-		c.restore();
-		                
-		c.globalAlpha = rect2.opacity;
-		c.save();
-		c.translate(rect2.x, rect2.y);
-		c.rotate(rect2.rotation);			
-		c.fillStyle = "#FFFF00";
-		c.fillRect(-rect2.width/2, -rect2.height/2, rect2.width, rect2.height);
-		c.restore();                  
-		c.globalAlpha = 1;                
-		
-		requestAnimationFrame(draw, canvas);		
-	}
-	
-	draw();
-}   
+  var rect = {
+    x: 50,
+    y: 50,
+    opacity: 1,
+    width: 40,
+    height: 40,
+    rotation: 0
+  };
+
+  var rect2 = {
+    x: 150,
+    y: 50,
+    width: 40,
+    height: 40,
+    rotation: 0,
+    opacity:1
+  };
+
+  anim("rect",rect).to({"x":20},0).to({"x":110},1, Timeline.Easing.Bounce.EaseOut).to({"x":20},1, Timeline.Easing.Cubic.EaseOut);
+  anim("rect",rect).to({"rotation":0},0).to({"rotation":3.14},0.99);
+  anim("rect",rect).to(1.69,{"opacity":1},0).to({"opacity":0},0.3799999999999999, Timeline.Easing.Bounce.EaseOut).to({"opacity":1},0.20000000000000018, Timeline.Easing.Cubic.EaseOut);
+  anim("rect",rect).to({"y":50},0).to({"y":50},0.98).to({"y":100},1.02, Timeline.Easing.Cubic.EaseOut).to({"y":50},0.27, Timeline.Easing.Cubic.EaseOut);
+  anim("rect2",rect2).to({"x":150},0).to({"x":150},0.34).to({"x":300},1.2, Timeline.Easing.Cubic.EaseOut);
+  anim("rect2",rect2).to({"y":50},0).to({"y":50},0.33).to({"y":100},1.19);
+  anim("rect2",rect2).to({"width":40},0).to({"width":40},0.34).to({"width":300},1.2);
+  anim("rect2",rect2).to({"height":40},0).to({"height":40},0.34).to({"height":300},1.2);
+  anim("rect2",rect2).to({"rotation":0},0).to({"rotation":0},0.31).to({"rotation":6.28},1.22, Timeline.Easing.Cubic.EaseOut);
+  anim("rect2",rect2).to({"opacity":1},0).to({"opacity":1},0.3).to({"opacity":0},1.22, Timeline.Easing.Cubic.EaseOut).to({"opacity":0},0.52);
+
+
+  Timeline.getGlobalInstance().loop(-1); //loop forever
+
+  function draw() {
+    var w = canvas.width;
+    var h = canvas.height;
+
+    c.fillStyle = "#FFFFFF";
+    c.fillRect(0, 0, w, h);
+
+    c.globalAlpha = rect.opacity;
+    c.save();
+    c.translate(rect.x, rect.y);
+    c.rotate(rect.rotation);
+    c.fillStyle = "#FF0000";
+    c.fillRect(-rect.width/2, -rect.height/2, rect.width, rect.height);
+    c.restore();
+
+    c.globalAlpha = rect2.opacity;
+    c.save();
+    c.translate(rect2.x, rect2.y);
+    c.rotate(rect2.rotation);
+    c.fillStyle = "#FFFF00";
+    c.fillRect(-rect2.width/2, -rect2.height/2, rect2.width, rect2.height);
+    c.restore();
+    c.globalAlpha = 1;
+
+    requestAnimationFrame(draw, canvas);
+  }
+
+  draw();
+}
 
 window.onload = init;
 
-</script>	  
+</script>
 </head>
-<body>	          
+<body>
 <h1>Timeline.js - Bouncing rectangles</h1>
 <canvas id="canvas" width="600" height="300" style="border: 1px solid black;"></canvas>
 </body>
