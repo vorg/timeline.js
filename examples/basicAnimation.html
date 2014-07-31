@@ -33,9 +33,10 @@ function init() {
     requestAnimationFrame(draw, document.body);
   }
 
-  anim(rect).to({x:50, rotation:0}, 0).to({x:200, rotation:Math.PI*2}, 2, Timeline.Easing.Cubic.EaseOut);
-
-  Timeline.getGlobalInstance().loop(-1); //loop forever
+  anim(rect).to({x:50, rotation:0}, 0).to({x:200, rotation:Math.PI*2}, 2, Timeline.Easing.Cubic.EaseOut)
+  .onStart(function() { console.log('go!'); })
+  .onUpdate(function() { console.log('animating!'); })
+  .onEnd(function() { console.log('done!'); });
 
   draw();
 }
