@@ -126,8 +126,8 @@ Timeline.prototype.applyValues = function() {
       else {
         propertyAnim.startValue = Number(startValue);
       }
-
       propertyAnim.hasStarted = true;
+      propertyAnim.onStart();
     }
     var t = (this.time - propertyAnim.startTime)/(propertyAnim.endTime - propertyAnim.startTime);
     t = Math.max(0, Math.min(t, 1));
@@ -136,6 +136,15 @@ Timeline.prototype.applyValues = function() {
     var value = propertyAnim.startValue + (propertyAnim.endValue - propertyAnim.startValue) * t;
     if (propertyAnim.unit) value += propertyAnim.unit;
     propertyAnim.target[propertyAnim.propertyName] = value;
+
+    if (propertyAnim.parent.onUpdateCallback) {
+      propertyAnim.parent.onUpdateCallback(propertyAnim);
+    }
+
+    if (this.time >= propertyAnim.endTime && !propertyAnim.hasEnded) {
+      propertyAnim.hasEnded = true;
+      propertyAnim.onEnd();
+    }
 
     if (t == 1) {
       if (this.loopMode == 0) {
@@ -153,10 +162,16 @@ function Anim(name, target, timeline) {
   this.endTime = 0;
   this.time = 0;
   this.propertyAnims = [];
+  this.hasStarted = false;
+  this.hasEnded = false;
+  this.onStartCallbackCalled = false;
+  this.onEndCallbackCalled = false;
+  this.onUpdateCallbackCalled = false;
 
   this.name = name;
   this.target = target;
   this.timeline = timeline;
+  this.animGroups = [];
 }
 
 //delay, properties, duration, easing
@@ -198,8 +213,11 @@ Anim.prototype.to = function() {
     easing = Timeline.Easing.Linear.EaseNone;
   }
 
+  var animGroup = [];
+  var nop = function() {}
+
   for(var propertyName in properties) {
-    this.timeline.anims.push({
+    var animInfo = {
       hasStarted: false,
       timeline: this.timeline,
       targetName: this.name,
@@ -209,12 +227,62 @@ Anim.prototype.to = function() {
       delay: delay,
       startTime: this.timeline.time + delay + this.endTime,
       endTime: this.timeline.time + delay + this.endTime + duration,
-      easing: easing
-    });
+      easing: easing,
+      parent: this,
+      onStart: nop,
+      onEnd: nop
+    };
+    this.timeline.anims.push(animInfo);
+    animGroup.push(animInfo);
   }
+  this.animGroups.push(animGroup);
   this.endTime += delay + duration;
   return this;
 };
+
+Anim.prototype.onStart = function(callback) {
+  var currentAnimGroup = this.animGroups[this.animGroups.length-1];
+  if (!currentAnimGroup) return;
+
+  var called = false;
+
+  currentAnimGroup.forEach(function(anim) {
+    anim.onStart = function() {
+      if (!called) {
+        called = true;
+        callback();
+      }
+    }
+  })
+
+  return this;
+}
+
+Anim.prototype.onUpdate = function(callback) {
+  var self = this;
+  this.onUpdateCallback = function() {
+     callback();
+  };
+  return this;
+}
+
+Anim.prototype.onEnd = function(callback) {
+  var currentAnimGroup = this.animGroups[this.animGroups.length-1];
+  if (!currentAnimGroup) return;
+
+  var called = false;
+
+  currentAnimGroup.forEach(function(anim) {
+    anim.onEnd = function() {
+      if (!called) {
+        called = true;
+        callback();
+      }
+    }
+  })
+
+  return this;
+}
 
 function anim(targetName, targetObject, parentTimeline) {
   var args = [];
