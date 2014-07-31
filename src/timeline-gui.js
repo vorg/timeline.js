@@ -40,13 +40,13 @@ Timeline.prototype.initGUI = function() {
   this.load();
 
   this.container = document.createElement("div");
-	this.container.style.width = "100%";
-	this.container.style.height = this.canvasHeight + "px";
-	this.container.style.background = "#EEEEEE";
-	this.container.style.position = "fixed";
-	this.container.style.left = "0px";
-	this.container.style.bottom = "0px";
-	document.body.appendChild(this.container);
+  this.container.style.width = "100%";
+  this.container.style.height = this.canvasHeight + "px";
+  this.container.style.background = "#EEEEEE";
+  this.container.style.position = "fixed";
+  this.container.style.left = "0px";
+  this.container.style.bottom = "0px";
+  document.body.appendChild(this.container);
 
   this.splitter = document.createElement("div");
   this.splitter.style.width = "100%";
@@ -54,8 +54,8 @@ Timeline.prototype.initGUI = function() {
   this.splitter.style.cursor = "ns-resize";
   this.splitter.style.position = "fixed";
   this.splitter.style.left = "0px";
-	this.splitter.style.bottom = (this.canvasHeight - 2) + "px";
-	this.splitter.addEventListener("mousedown", function() {
+  this.splitter.style.bottom = (this.canvasHeight - 2) + "px";
+  this.splitter.addEventListener("mousedown", function() {
     function mouseMove(e) {
       var h = (window.innerHeight - e.clientY);
       self.splitter.style.bottom = (h - 2) + "px";
@@ -71,13 +71,13 @@ Timeline.prototype.initGUI = function() {
     }
     document.body.addEventListener("mousemove", mouseMove, false);
     document.body.addEventListener("mouseup", mouseUp, false);
-	}, false);
+  }, false);
   document.body.appendChild(this.splitter);
 
-	this.canvas = document.createElement("canvas");
-	this.c = this.canvas.getContext("2d");
-	this.canvas.width = 0;
-	this.container.appendChild(this.canvas);
+  this.canvas = document.createElement("canvas");
+  this.c = this.canvas.getContext("2d");
+  this.canvas.width = 0;
+  this.container.appendChild(this.canvas);
 
 
   this.buildInputDialog();
@@ -534,26 +534,26 @@ Timeline.prototype.drawTrack = function(track, y) {
 
 
 Timeline.prototype.drawLine = function(x1, y1, x2, y2, color) {
-	this.c.strokeStyle = color;
-	this.c.beginPath();
-	this.c.moveTo(x1+0.5, y1+0.5);
-	this.c.lineTo(x2+0.5, y2+0.5);
-	this.c.stroke();
+  this.c.strokeStyle = color;
+  this.c.beginPath();
+  this.c.moveTo(x1+0.5, y1+0.5);
+  this.c.lineTo(x2+0.5, y2+0.5);
+  this.c.stroke();
 };
 
 Timeline.prototype.drawRect = function(x, y, w, h, color) {
-	this.c.fillStyle = color;
-	this.c.fillRect(x, y, w, h);
+  this.c.fillStyle = color;
+  this.c.fillRect(x, y, w, h);
 };
 
 Timeline.prototype.drawCenteredRect = function(x, y, w, h, color) {
-	this.c.fillStyle = color;
-	this.c.fillRect(x-w/2, y-h/2, w, h);
+  this.c.fillStyle = color;
+  this.c.fillRect(x-w/2, y-h/2, w, h);
 };
 
 Timeline.prototype.drawRombus = function(x, y, w, h, color, drawLeft, drawRight, strokeColor) {
-	this.c.fillStyle = color;
-	if (strokeColor) {
+  this.c.fillStyle = color;
+  if (strokeColor) {
     this.c.lineWidth = 2;
     this.c.strokeStyle = strokeColor;
     this.c.beginPath();
@@ -566,7 +566,7 @@ Timeline.prototype.drawRombus = function(x, y, w, h, color, drawLeft, drawRight,
     this.c.lineWidth = 1;
   }
 
-	if (drawLeft) {
+  if (drawLeft) {
     this.c.beginPath();
     this.c.moveTo(x, y - h/2);
     this.c.lineTo(x - w/2, y);
@@ -831,20 +831,20 @@ Timeline.prototype.rebuildTrackAnimsFromKeys = function(track) {
     var anim = {
       timeline: this,
       target: track.target,
-			propertyName: track.propertyName,
-			startValue: prevKeyValue,
-			endValue: key.value,
-			delay: delay,
-			startTime: prevKeyTime,
-			endTime: key.time,
-			easing: prevKeyEasing
-		};
-		track.anims.push(anim);
-		this.anims.push(anim);
-		delay = 0;
-		prevKeyTime = key.time;
-		prevKeyValue = key.value;
-		prevKeyEasing = key.easing;
+      propertyName: track.propertyName,
+      startValue: prevKeyValue,
+      endValue: key.value,
+      delay: delay,
+      startTime: prevKeyTime,
+      endTime: key.time,
+      easing: prevKeyEasing
+    };
+    track.anims.push(anim);
+    this.anims.push(anim);
+    delay = 0;
+    prevKeyTime = key.time;
+    prevKeyValue = key.value;
+    prevKeyEasing = key.easing;
   }
 };
 

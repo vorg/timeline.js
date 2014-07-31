@@ -13,23 +13,23 @@
 var Timeline = function() {
   this.name = "Global";
   this.anims = [];
-	this.time = 0;
-	this.totalTime = 0;
-	this.loopCount = 0;
-	this.loopMode = 0;
-	this.playing = true;
-	var self = this;
+  this.time = 0;
+  this.totalTime = 0;
+  this.loopCount = 0;
+  this.loopMode = 0;
+  this.playing = true;
+  var self = this;
   this.fps = 30;
-	this.loopInterval = setInterval(function() {
+  this.loopInterval = setInterval(function() {
     self.update();
-	}, 1000/this.fps);
+  }, 1000/this.fps);
 };
 
 Timeline.getGlobalInstance = function() {
-	if (!Timeline.globalInstance) {
-		Timeline.globalInstance = new Timeline();
-	}
-	return Timeline.globalInstance;
+  if (!Timeline.globalInstance) {
+    Timeline.globalInstance = new Timeline();
+  }
+  return Timeline.globalInstance;
 };
 
 //Possible values of n:
@@ -138,14 +138,14 @@ Timeline.prototype.applyValues = function() {
 //--------------------------------------------------------------------
 
 function Anim(name, target, timeline) {
-	this.startTime = 0;
-	this.endTime = 0;
-	this.time = 0;
-	this.propertyAnims = [];
+  this.startTime = 0;
+  this.endTime = 0;
+  this.time = 0;
+  this.propertyAnims = [];
 
-	this.name = name;
-	this.target = target;
-	this.timeline = timeline;
+  this.name = name;
+  this.target = target;
+  this.timeline = timeline;
 }
 
 //delay, properties, duration, easing
@@ -188,21 +188,21 @@ Anim.prototype.to = function() {
   }
 
   for(var propertyName in properties) {
-		this.timeline.anims.push({
+    this.timeline.anims.push({
       hasStarted: false,
       timeline: this.timeline,
       targetName: this.name,
       target: this.target,
-			propertyName: propertyName,
-			endValue: properties[propertyName],
-			delay: delay,
-			startTime: this.timeline.time + delay + this.endTime,
-			endTime: this.timeline.time + delay + this.endTime + duration,
-			easing: easing
-		});
-	}
-	this.endTime += delay + duration;
-	return this;
+      propertyName: propertyName,
+      endValue: properties[propertyName],
+      delay: delay,
+      startTime: this.timeline.time + delay + this.endTime,
+      endTime: this.timeline.time + delay + this.endTime + duration,
+      easing: easing
+    });
+  }
+  this.endTime += delay + duration;
+  return this;
 };
 
 function anim(targetName, targetObject, parentTimeline) {
@@ -240,95 +240,95 @@ function anim(targetName, targetObject, parentTimeline) {
 Timeline.Easing = { Linear: {}, Quadratic: {}, Cubic: {}, Quartic: {}, Quintic: {}, Sinusoidal: {}, Exponential: {}, Circular: {}, Elastic: {}, Back: {}, Bounce: {} };
 
 Timeline.Easing.Linear.EaseNone = function ( k ) {
-	return k;
+  return k;
 };
 
 Timeline.Easing.Quadratic.EaseIn = function ( k ) {
-	return k * k;
+  return k * k;
 };
 
 Timeline.Easing.Quadratic.EaseOut = function ( k ) {
-	return - k * ( k - 2 );
+  return - k * ( k - 2 );
 };
 
 Timeline.Easing.Quadratic.EaseInOut = function ( k ) {
-	if ( ( k *= 2 ) < 1 ) return 0.5 * k * k;
-	return - 0.5 * ( --k * ( k - 2 ) - 1 );
+  if ( ( k *= 2 ) < 1 ) return 0.5 * k * k;
+  return - 0.5 * ( --k * ( k - 2 ) - 1 );
 };
 
 Timeline.Easing.Cubic.EaseIn = function ( k ) {
-	return k * k * k;
+  return k * k * k;
 };
 
 Timeline.Easing.Cubic.EaseOut = function ( k ) {
-	return --k * k * k + 1;
+  return --k * k * k + 1;
 };
 
 Timeline.Easing.Cubic.EaseInOut = function ( k ) {
-	if ( ( k *= 2 ) < 1 ) return 0.5 * k * k * k;
-	return 0.5 * ( ( k -= 2 ) * k * k + 2 );
+  if ( ( k *= 2 ) < 1 ) return 0.5 * k * k * k;
+  return 0.5 * ( ( k -= 2 ) * k * k + 2 );
 };
 
 Timeline.Easing.Elastic.EaseIn = function( k ) {
-	var s, a = 0.1, p = 0.4;
-	if ( k === 0 ) return 0; if ( k == 1 ) return 1; if ( !p ) p = 0.3;
-	if ( !a || a < 1 ) { a = 1; s = p / 4; }
-	else s = p / ( 2 * Math.PI ) * Math.asin( 1 / a );
-	return - ( a * Math.pow( 2, 10 * ( k -= 1 ) ) * Math.sin( ( k - s ) * ( 2 * Math.PI ) / p ) );
+  var s, a = 0.1, p = 0.4;
+  if ( k === 0 ) return 0; if ( k == 1 ) return 1; if ( !p ) p = 0.3;
+  if ( !a || a < 1 ) { a = 1; s = p / 4; }
+  else s = p / ( 2 * Math.PI ) * Math.asin( 1 / a );
+  return - ( a * Math.pow( 2, 10 * ( k -= 1 ) ) * Math.sin( ( k - s ) * ( 2 * Math.PI ) / p ) );
 };
 
 Timeline.Easing.Elastic.EaseOut = function( k ) {
-	var s, a = 0.1, p = 0.4;
-	if ( k === 0 ) return 0; if ( k == 1 ) return 1; if ( !p ) p = 0.3;
-	if ( !a || a < 1 ) { a = 1; s = p / 4; }
-	else s = p / ( 2 * Math.PI ) * Math.asin( 1 / a );
-	return ( a * Math.pow( 2, - 10 * k) * Math.sin( ( k - s ) * ( 2 * Math.PI ) / p ) + 1 );
+  var s, a = 0.1, p = 0.4;
+  if ( k === 0 ) return 0; if ( k == 1 ) return 1; if ( !p ) p = 0.3;
+  if ( !a || a < 1 ) { a = 1; s = p / 4; }
+  else s = p / ( 2 * Math.PI ) * Math.asin( 1 / a );
+  return ( a * Math.pow( 2, - 10 * k) * Math.sin( ( k - s ) * ( 2 * Math.PI ) / p ) + 1 );
 };
 
 Timeline.Easing.Elastic.EaseInOut = function( k ) {
-	var s, a = 0.1, p = 0.4;
-	if ( k === 0 ) return 0; if ( k == 1 ) return 1; if ( !p ) p = 0.3;
-        if ( !a || a < 1 ) { a = 1; s = p / 4; }
-        else s = p / ( 2 * Math.PI ) * Math.asin( 1 / a );
-        if ( ( k *= 2 ) < 1 ) return - 0.5 * ( a * Math.pow( 2, 10 * ( k -= 1 ) ) * Math.sin( ( k - s ) * ( 2 * Math.PI ) / p ) );
-        return a * Math.pow( 2, -10 * ( k -= 1 ) ) * Math.sin( ( k - s ) * ( 2 * Math.PI ) / p ) * 0.5 + 1;
+  var s, a = 0.1, p = 0.4;
+  if ( k === 0 ) return 0; if ( k == 1 ) return 1; if ( !p ) p = 0.3;
+  if ( !a || a < 1 ) { a = 1; s = p / 4; }
+  else s = p / ( 2 * Math.PI ) * Math.asin( 1 / a );
+  if ( ( k *= 2 ) < 1 ) return - 0.5 * ( a * Math.pow( 2, 10 * ( k -= 1 ) ) * Math.sin( ( k - s ) * ( 2 * Math.PI ) / p ) );
+  return a * Math.pow( 2, -10 * ( k -= 1 ) ) * Math.sin( ( k - s ) * ( 2 * Math.PI ) / p ) * 0.5 + 1;
 };
 
 Timeline.Easing.Back.EaseIn = function( k ) {
-	var s = 1.70158;
-	return k * k * ( ( s + 1 ) * k - s );
+  var s = 1.70158;
+  return k * k * ( ( s + 1 ) * k - s );
 };
 
 Timeline.Easing.Back.EaseOut = function( k ) {
-	var s = 1.70158;
-	return ( k = k - 1 ) * k * ( ( s + 1 ) * k + s ) + 1;
+  var s = 1.70158;
+  return ( k = k - 1 ) * k * ( ( s + 1 ) * k + s ) + 1;
 };
 
 Timeline.Easing.Back.EaseInOut = function( k ) {
-	var s = 1.70158 * 1.525;
-	if ( ( k *= 2 ) < 1 ) return 0.5 * ( k * k * ( ( s + 1 ) * k - s ) );
-	return 0.5 * ( ( k -= 2 ) * k * ( ( s + 1 ) * k + s ) + 2 );
+  var s = 1.70158 * 1.525;
+  if ( ( k *= 2 ) < 1 ) return 0.5 * ( k * k * ( ( s + 1 ) * k - s ) );
+  return 0.5 * ( ( k -= 2 ) * k * ( ( s + 1 ) * k + s ) + 2 );
 };
 
 Timeline.Easing.Bounce.EaseIn = function( k ) {
-	return 1 - Timeline.Easing.Bounce.EaseOut( 1 - k );
+  return 1 - Timeline.Easing.Bounce.EaseOut( 1 - k );
 };
 
 Timeline.Easing.Bounce.EaseOut = function( k ) {
-	if ( ( k /= 1 ) < ( 1 / 2.75 ) ) {
-		return 7.5625 * k * k;
-	} else if ( k < ( 2 / 2.75 ) ) {
-		return 7.5625 * ( k -= ( 1.5 / 2.75 ) ) * k + 0.75;
-	} else if ( k < ( 2.5 / 2.75 ) ) {
-		return 7.5625 * ( k -= ( 2.25 / 2.75 ) ) * k + 0.9375;
-	} else {
-		return 7.5625 * ( k -= ( 2.625 / 2.75 ) ) * k + 0.984375;
-	}
+  if ( ( k /= 1 ) < ( 1 / 2.75 ) ) {
+    return 7.5625 * k * k;
+  } else if ( k < ( 2 / 2.75 ) ) {
+    return 7.5625 * ( k -= ( 1.5 / 2.75 ) ) * k + 0.75;
+  } else if ( k < ( 2.5 / 2.75 ) ) {
+    return 7.5625 * ( k -= ( 2.25 / 2.75 ) ) * k + 0.9375;
+  } else {
+    return 7.5625 * ( k -= ( 2.625 / 2.75 ) ) * k + 0.984375;
+  }
 };
 
 Timeline.Easing.Bounce.EaseInOut = function( k ) {
-	if ( k < 0.5 ) return Timeline.Easing.Bounce.EaseIn( k * 2 ) * 0.5;
-	return Timeline.Easing.Bounce.EaseOut( k * 2 - 1 ) * 0.5 + 0.5;
+  if ( k < 0.5 ) return Timeline.Easing.Bounce.EaseIn( k * 2 ) * 0.5;
+  return Timeline.Easing.Bounce.EaseOut( k * 2 - 1 ) * 0.5 + 0.5;
 };
 
 Timeline.easingFunctionToString = function( f ) {
