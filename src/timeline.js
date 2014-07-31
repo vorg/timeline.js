@@ -122,7 +122,9 @@ Timeline.prototype.applyValues = function() {
         propertyAnim.startValue = Number(startValue);
       }
       propertyAnim.hasStarted = true;
-      propertyAnim.onStart();
+      if (propertyAnim.onStart) {
+        propertyAnim.onStart();
+      }
     }
     var duration = propertyAnim.endTime - propertyAnim.startTime;
     var t = duration ? (this.time - propertyAnim.startTime)/(duration) : 1;
@@ -134,13 +136,15 @@ Timeline.prototype.applyValues = function() {
     if (propertyAnim.unit) value += propertyAnim.unit;
     propertyAnim.target[propertyAnim.propertyName] = value;
 
-    if (propertyAnim.parent.onUpdateCallback) {
+    if (propertyAnim.parent && propertyAnim.parent.onUpdateCallback) {
       propertyAnim.parent.onUpdateCallback(propertyAnim);
     }
 
     if (this.time >= propertyAnim.endTime && !propertyAnim.hasEnded) {
       propertyAnim.hasEnded = true;
-      propertyAnim.onEnd();
+      if (propertyAnim.onEnd) {
+        propertyAnim.onEnd();
+      }
     }
 
     if (t == 1) {
