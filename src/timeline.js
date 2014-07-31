@@ -112,13 +112,14 @@ Timeline.prototype.findAnimationEnd = function() {
 };
 
 Timeline.prototype.applyValues = function() {
-	for(var i=0; i<this.anims.length; i++) {
-		var propertyAnim = this.anims[i];
-		if (this.time < propertyAnim.startTime) {
-			continue;
-		}
-    if (this.time > propertyAnim.startTime && !propertyAnim.hasStarted) {
+  for(var i=0; i<this.anims.length; i++) {
+    var propertyAnim = this.anims[i];
+    if (this.time < propertyAnim.startTime) {
+      continue;
+    }
+    if (this.time >= propertyAnim.startTime && !propertyAnim.hasStarted) {
       propertyAnim.startValue = propertyAnim.target[propertyAnim.propertyName];
+      propertyAnim.hasStarted = true;
     }
     var t = (this.time - propertyAnim.startTime)/(propertyAnim.endTime - propertyAnim.startTime);
     t = Math.max(0, Math.min(t, 1));
