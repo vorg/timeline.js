@@ -79,20 +79,15 @@ Timeline.prototype.update = function(deltaTime) {
   if (this.loopMode !== 0) {
     var animationEnd = this.findAnimationEnd();
     if (this.time > animationEnd) {
-      this.loopCount++;
-      this.time = 0;
-      for(var i=0; i<this.anims.length; i++) {
-        this.anims[i].hasStarted = false;
+      if (this.loopMode == -1 || (this.loopCount < this.loopMode)) {
+        this.time = 0;
+        this.loopCount++;
+        for(var i=0; i<this.anims.length; i++) {
+          this.anims[i].hasStarted = false;
+          this.anims[i].hasEnded = false;
+        }
       }
-    }
-    if (this.loopMode == -1) {
-      //loop infinitely
-      for(var i=0; i<this.anims.length; i++) {
-        this.anims[i].hasStarted = false;
-      }
-    }
-    else {
-      if (this.loopCount >= this.loopMode) {
+      else {
         this.playing = false;
       }
     }
@@ -114,7 +109,7 @@ Timeline.prototype.findAnimationEnd = function() {
 Timeline.prototype.applyValues = function() {
   for(var i=0; i<this.anims.length; i++) {
     var propertyAnim = this.anims[i];
-    if (this.time < propertyAnim.startTime) {
+    if (this.time < propertyAnim.startTime || propertyAnim.hasEnded) {
       continue;
     }
     if (this.time >= propertyAnim.startTime && !propertyAnim.hasStarted) {
@@ -129,11 +124,13 @@ Timeline.prototype.applyValues = function() {
       propertyAnim.hasStarted = true;
       propertyAnim.onStart();
     }
-    var t = (this.time - propertyAnim.startTime)/(propertyAnim.endTime - propertyAnim.startTime);
+    var duration = propertyAnim.endTime - propertyAnim.startTime;
+    var t = duration ? (this.time - propertyAnim.startTime)/(duration) : 1;
     t = Math.max(0, Math.min(t, 1));
     t = propertyAnim.easing(t);
 
     var value = propertyAnim.startValue + (propertyAnim.endValue - propertyAnim.startValue) * t;
+
     if (propertyAnim.unit) value += propertyAnim.unit;
     propertyAnim.target[propertyAnim.propertyName] = value;
 
@@ -164,9 +161,6 @@ function Anim(name, target, timeline) {
   this.propertyAnims = [];
   this.hasStarted = false;
   this.hasEnded = false;
-  this.onStartCallbackCalled = false;
-  this.onEndCallbackCalled = false;
-  this.onUpdateCallbackCalled = false;
 
   this.name = name;
   this.target = target;
@@ -252,7 +246,7 @@ Anim.prototype.onStart = function(callback) {
         called = true;
         callback();
       }
-    }
+    };
   })
 
   return this;
