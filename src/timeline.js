@@ -118,13 +118,24 @@ Timeline.prototype.applyValues = function() {
       continue;
     }
     if (this.time >= propertyAnim.startTime && !propertyAnim.hasStarted) {
-      propertyAnim.startValue = propertyAnim.target[propertyAnim.propertyName];
+      var startValue = propertyAnim.target[propertyAnim.propertyName];
+      if (startValue.length && startValue.indexOf('px') > -1) {
+        propertyAnim.startValue = Number(startValue.replace('px', ''));
+        propertyAnim.unit = 'px';
+      }
+      else {
+        propertyAnim.startValue = Number(startValue);
+      }
+
       propertyAnim.hasStarted = true;
     }
     var t = (this.time - propertyAnim.startTime)/(propertyAnim.endTime - propertyAnim.startTime);
     t = Math.max(0, Math.min(t, 1));
     t = propertyAnim.easing(t);
-    propertyAnim.target[propertyAnim.propertyName] = propertyAnim.startValue + (propertyAnim.endValue - propertyAnim.startValue) * t;
+
+    var value = propertyAnim.startValue + (propertyAnim.endValue - propertyAnim.startValue) * t;
+    if (propertyAnim.unit) value += propertyAnim.unit;
+    propertyAnim.target[propertyAnim.propertyName] = value;
 
     if (t == 1) {
       if (this.loopMode == 0) {
