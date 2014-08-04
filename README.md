@@ -69,7 +69,11 @@ variable name.
 
 ### 3. Node.js
 
+First install the `timeline-js` package from npm
+
     npm install timeline-js
+
+And then
 
     var timeline = require('timeline-js');
     var Timeline = timeline.Timeline;
