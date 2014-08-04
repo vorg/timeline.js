@@ -67,3 +67,13 @@ Add the rect object and it's x and y properties to animation and use
 their default values. Target name should be always exactly the same as
 variable name.
 
+### 3. Node.js
+
+  npm install timeline-js
+
+  var timeline = require('timeline-js');
+  var Timeline = timeline.Timeline;
+  var anim = timeline.anim;
+
+  anim(target).to(delay, {property:value,...}, duration, easing);
+
