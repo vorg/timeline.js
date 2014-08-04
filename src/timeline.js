@@ -429,3 +429,9 @@ for(var easingFunctionFamilyName in Timeline.Easing) {
     Timeline.easingMap[easingFunctionFamilyName + "." + easingFunctionName] = easingFunctionFamily[easingFunctionName];
   }
 }
+
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
+  module.exports.Timeline = Timeline;
+  module.exports.Anim = Anim;
+  module.exports.anim = anim;
+}
