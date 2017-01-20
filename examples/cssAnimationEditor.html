@@ -20,9 +20,50 @@ h1 {
 #canvas {
   margin-left: 1em;
 }
-
+.title {
+  text-align: center;
+}
+.keyframes {
+  position: absolute;
+  top:300px;
+}
+.explanation {
+  position: absolute;
+  top:310px;
+}
 
 </style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+  <h1 class="title">Timeline.js - CSS rectangles</h1>
+  <button type="button" class="btn btn-primary btn-sm clearLocalStorage">Clear LocalStorage</button>
+  <button type="button" class="btn btn-primary btn-sm timelineFullWidth">Make Full Width</button>
+  <button type="button" class="btn btn-primary btn-sm timelinePartialWidth">Make Partial Width</button>
+  <BR>
+
+  <div id="rect0"></div>
+  <div id="rect1"></div>
+  <div id="rect2"></div>
+  <div id="rect3"></div>
+
+  <div class="keyframes col-sm-8"></div>
+  <div class="explanation col-sm-8">
+    This has been updated to support implementing the timeline into a bootstrap layout. If your mouse isn't properly selecting the keyframes, you may need to adjust the xOffset. During initial development it seemed to work great in Firefox, but need to be set at 0 for Chrome. The JSON Editor to the right populates each time you drag loading info from LocalStorage.
+    <BR><BR>
+    There is still plenty to do to integrate it into my project, but this is a great starting point for someone that wants a timeline that isn't fixed to the bottom / full width.
+  </div>
+  <div id="jsonresults" class="jsonresults" style="z-index:5000"></div>
+
+</body>
+<link rel="stylesheet" href="../extras/jsoneditor/jsoneditor.min.css">
+
+<script type="text/javascript" src="../extras/jsoneditor/jsoneditor.min.js"></script>
 <script type="text/javascript" src="../src/timeline.js"></script>
 <script type="text/javascript" src="../src/timeline-gui.js"></script>
 <script type="text/javascript" src="js/RequestAnimationFrame.js"></script>
@@ -79,14 +120,7 @@ function init() {
 }
 
 window.onload = init;
-
-</script>
-</head>
-<body>
-  <h1>Timeline.js - CSS rectangles</h1>
-  <div id="rect0"></div>
-  <div id="rect1"></div>
-  <div id="rect2"></div>
-  <div id="rect3"></div>
-</body>
-</html>
+var container = document.getElementById("jsonresults");
+var editor = new JSONEditor(container);
+editor.set(jsonStorage);
+</script></html>

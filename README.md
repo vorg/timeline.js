@@ -39,16 +39,20 @@ At the same time animate opacity to 0 over 4s.
 
 ### 2. Timeline GUI
 
+Check the example page at "/examples/cssAnimationEditor.html.
+
     <script type="text/javascript" src="timeline/gui.js"></script>
 
     anim(targetName, target).to(delay, {property:value,...}, duration, easing);
 
-Adding gui.js script to the page will open a timeline panel on the
-bottom of the page if any animation was added before first frame. One
-track for every animated property will be created. Click and drag to
+Adding the gui.js script to the page will open a timeline panel to a div 
+defined in the timeline-gui.js as 'timelineTarget' if any animation 
+was added before first frame. 
+
+One track for every animated property will be created. Click and drag to
 edit key frames, double click to add new frames. Press export button
 (tree horizontal lines) to export code you can then copy paste in
-your scrip	.
+your script.
 
 In this case we have to specify targetName in anim() that will be
 used when we export the code from the timeline GUI. For each property
@@ -66,18 +70,3 @@ all to() calls modifying this property are ignored.
 Add the rect object and it's x and y properties to animation and use
 their default values. Target name should be always exactly the same as
 variable name.
-
-### 3. Node.js
-
-First install the `timeline-js` package from npm
-
-    npm install timeline-js
-
-And then
-
-    var timeline = require('timeline-js');
-    var Timeline = timeline.Timeline;
-    var anim = timeline.anim;
-
-    anim(target).to(delay, {property:value,...}, duration, easing);
-
