@@ -411,6 +411,7 @@ Timeline.prototype.updateGUI = function() {
     var scrollY = this.tracksScrollY * (this.tracks.length * this.trackLabelHeight - this.canvas.height + this.headerHeight);
     yshift -= scrollY;
     if (yshift < this.headerHeight) continue;
+    if (yshift - this.trackLabelHeight + 1 > h) break;
     this.drawTrack(this.tracks[i], yshift);
   }
 
