@@ -10,8 +10,14 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
+var timelineTarget = $(".keyframes");
+var jsonStorage = {};
+var xOffset="15";
+var yOffset="0";
 Timeline.prototype.initGUI = function() {
   var self = this;
+  timelineTarget = $(".keyframes");
+
 
   this.trackLabelWidth = 108;
   this.trackLabelHeight = 20;
@@ -26,7 +32,7 @@ Timeline.prototype.initGUI = function() {
   this.timeScrollThumbWidth = 0;
   this.timeScrollX = 0;
   this.headerHeight = 30;
-  this.canvasHeight = 200;
+  this.canvasHeight = 300;
   this.draggingTime = false;
   this.draggingTracksScrollThumb = false;
   this.draggingTimeScrollThumb = false;
@@ -38,18 +44,17 @@ Timeline.prototype.initGUI = function() {
   this.trackNameCounter = 0;
   this.initTracks();
   this.load();
-
   this.container = document.createElement("div");
-  this.container.style.width = "100%";
+  this.container.style.width = timelineTarget.width();
   this.container.style.height = this.canvasHeight + "px";
-  this.container.style.background = "#EEEEEE";
+  this.container.style.background = "#22EEEE";
   this.container.style.position = "fixed";
   this.container.style.left = "0px";
   this.container.style.bottom = "0px";
-  document.body.appendChild(this.container);
+  timelineTarget.append(this.container);
 
   this.splitter = document.createElement("div");
-  this.splitter.style.width = "100%";
+  this.splitter.style.width = timelineTarget.width();
   this.splitter.style.height = "4px";
   this.splitter.style.cursor = "ns-resize";
   this.splitter.style.position = "fixed";
@@ -66,18 +71,18 @@ Timeline.prototype.initGUI = function() {
       self.save();
     }
     function mouseUp(e) {
-      document.body.removeEventListener("mousemove", mouseMove, false);
-     document.body.removeEventListener("mouseup", mouseUp, false);
+      timelineTarget.removeEventListener("mousemove", mouseMove, false);
+     timelineTarget.removeEventListener("mouseup", mouseUp, false);
     }
-    document.body.addEventListener("mousemove", mouseMove, false);
-    document.body.addEventListener("mouseup", mouseUp, false);
+    timelineTarget.addEventListener("mousemove", mouseMove, false);
+    timelineTarget.addEventListener("mouseup", mouseUp, false);
   }, false);
-  document.body.appendChild(this.splitter);
+  timelineTarget.append(this.splitter);
 
   this.canvas = document.createElement("canvas");
   this.c = this.canvas.getContext("2d");
-  this.canvas.width = 0;
-  this.container.appendChild(this.canvas);
+  this.canvas.width = timelineTarget.width();
+  timelineTarget.append(this.canvas);
 
 
   this.buildInputDialog();
@@ -88,13 +93,13 @@ Timeline.prototype.initGUI = function() {
   this.canvas.addEventListener('mousedown', function(event) {
     self.onMouseDown(event);
   }, false);
-  document.body.addEventListener('mousemove', function(event) {
+  this.canvas.addEventListener('mousemove', function(event) {
     self.onDocumentMouseMove(event);
   }, false);
   this.canvas.addEventListener('mousemove', function(event) {
     self.onCanvasMouseMove(event);
   }, false);
-  document.body.addEventListener('mouseup', function(event) {
+  this.canvas.addEventListener('mouseup', function(event) {
     self.onMouseUp(event);
   }, false);
   this.canvas.addEventListener('dblclick', function(event) {
@@ -105,8 +110,8 @@ Timeline.prototype.initGUI = function() {
 Timeline.prototype.onMouseDown = function(event) {
   this.selectedKeys = [];
 
-  var x = event.layerX;
-  var y = event.layerY;
+  var x = event.layerX-xOffset;
+  var y = event.layerY-yOffset;
 
   if (x > this.trackLabelWidth && y < this.headerHeight) {
     //timeline
@@ -122,7 +127,7 @@ Timeline.prototype.onMouseDown = function(event) {
   }
   else if (x > this.trackLabelWidth && y > this.headerHeight && y < this.canvasHeight - this.timeScrollHeight) {
     //keys
-    this.selectKeys(event.layerX, event.layerY);
+    this.selectKeys(x, y);
     if (this.selectedKeys.length > 0) {
       this.draggingKeys = true;
     }
@@ -144,8 +149,8 @@ Timeline.prototype.onMouseDown = function(event) {
 };
 
 Timeline.prototype.onDocumentMouseMove = function(event) {
-  var x = event.layerX;
-  var y = event.layerY;
+  var x = event.layerX-xOffset;
+  var y = event.layerY-yOffset;
 
   if (this.draggingTime) {
     this.time = this.xToTime(x);
@@ -170,8 +175,8 @@ Timeline.prototype.onDocumentMouseMove = function(event) {
 };
 
 Timeline.prototype.onCanvasMouseMove = function(event) {
-  var x = event.layerX;
-  var y = event.layerY;
+  var x = event.layerX-xOffset;
+  var y = event.layerY-yOffset;
 
   if (this.draggingTracksScrollThumb) {
     this.tracksScrollThumbPos = y - this.headerHeight - this.tracksScrollThumbDragOffset;
@@ -224,18 +229,21 @@ Timeline.prototype.onMouseUp = function(event) {
 };
 
 Timeline.prototype.onMouseClick = function(event) {
-  if (event.layerX < 1*this.headerHeight - 4 * 0 && event.layerY < this.headerHeight) {
+  var x = event.layerX-xOffset;
+  var y = event.layerY-yOffset;
+
+  if (x < 1*this.headerHeight - 4 * 0 && y < this.headerHeight) {
     this.play();
   }
-  if (event.layerX > 1*this.headerHeight - 4 * 0 && event.layerX < 2*this.headerHeight - 4 * 1 && event.layerY < this.headerHeight) {
+  if (x > 1*this.headerHeight - 4 * 0 && x < 2*this.headerHeight - 4 * 1 && y < this.headerHeight) {
     this.pause();
   }
 
-  if (event.layerX > 2*this.headerHeight - 4 * 1 && event.layerX < 3*this.headerHeight - 4 * 2 && event.layerY < this.headerHeight) {
+  if (x > 2*this.headerHeight - 4 * 1 && x < 3*this.headerHeight - 4 * 2 && y < this.headerHeight) {
     this.stop();
   }
 
-  if (event.layerX > 3*this.headerHeight - 4 * 2 && event.layerX < 4*this.headerHeight - 4 * 3 && event.layerY < this.headerHeight) {
+  if (x > 3*this.headerHeight - 4 * 2 && x < 4*this.headerHeight - 4 * 3 && y < this.headerHeight) {
     this.exportCode();
   }
 
@@ -245,8 +253,8 @@ Timeline.prototype.onMouseClick = function(event) {
 };
 
 Timeline.prototype.onMouseDoubleClick = function(event) {
-  var x = event.layerX;
-  var y = event.layerY;
+  var x = event.layerX-xOffset;
+  var y = event.layerY-yOffset;
 
   if (x > this.trackLabelWidth && y < this.headerHeight) {
     //timeline
@@ -342,8 +350,8 @@ Timeline.prototype.updateGUI = function() {
   if (!this.canvas) {
     this.initGUI();
   }
-
-  this.canvas.width = window.innerWidth;
+  // use this to set the width of the canvas to fill the Div that it is assigned to.
+  this.canvas.width = timelineTarget.width();
   this.canvas.height = this.canvasHeight;
   var w = this.canvas.width;
   var h = this.canvas.height;
@@ -500,19 +508,22 @@ Timeline.prototype.xToTime = function(x) {
 Timeline.prototype.drawTrack = function(track, y) {
   var xshift = 5;
   if (track.type == "object") {
-    //object track header background
-    this.drawRect(0, y - this.trackLabelHeight + 1, this.trackLabelWidth, this.trackLabelHeight-1, "#FFFFFF");
+    //object track title header background
+    this.drawRect(0, y - this.trackLabelHeight + 1, this.trackLabelWidth, this.trackLabelHeight-1, "#EEE");
     //label color
     this.c.fillStyle = "#000000";
   }
   else {
     xshift += 10;
     //label color
+    this.fillStyle = 'rgba(225,225,225,1)';
+        this.drawRect(0, y - this.trackLabelHeight + 1, this.trackLabelWidth, this.trackLabelHeight-1, "#FFF");
+
     this.c.fillStyle = "#555555";
   }
 
   //bottom track line
-  this.drawLine(0, y, this.canvas.width, y, "#FFFFFF");
+  this.drawLine(0, y, this.canvas.width, y, "#DDD");
   //draw track label
   this.c.fillText(track.name, xshift, y - this.trackLabelHeight/4);
 
@@ -694,20 +705,20 @@ Timeline.prototype.initTracks = function() {
   }
 };
 
-Timeline.prototype.buildInputDialog = function() {
+Timeline.prototype.buildInputDialog = function() {  
   this.keyEditDialog = document.createElement("div");
   this.keyEditDialog.id = "keyEditDialog";
   this.keyEditDialog.style.cssText = "position:absolute; padding:5px; background: #DDDDDD; font-family:arial; font-size:11px; left: 100px; top:100px; border: 1px solid #AAAAAA; border-radius: 5px;";
-
+  
   var easingOptions = "";
-
+  
   for(var easingFunctionFamilyName in Timeline.Easing) {
     var easingFunctionFamily = Timeline.Easing[easingFunctionFamilyName];
-    for(var easingFunctionName in easingFunctionFamily) {
+    for(var easingFunctionName in easingFunctionFamily) {   
       easingOptions += "<option>" + easingFunctionFamilyName + "." + easingFunctionName + "</option>";
-    }
+    }  
   }
-
+    
   var controls = "";
   controls += '<label style="margin-right:10px">Value<input type="text" id="keyEditDialogValue"/></label>';
   controls += '<label style="margin-right:10px">Easing<select id="keyEditDialogEasing">'+easingOptions+'</label>';
@@ -715,14 +726,14 @@ Timeline.prototype.buildInputDialog = function() {
   controls += '<input id="keyEditDialogCancel" style="margin-right:10px" type="button" value="Cancel"/>';
   controls += '<a id="keyEditDialogDelete" style="margin-right:5px" href="#">[x]</a>';
   this.keyEditDialog.innerHTML = controls;
-  document.body.appendChild(this.keyEditDialog);
-
+  document.body.appendChild(this.keyEditDialog);   
+  
   this.keyEditDialogValue = document.getElementById("keyEditDialogValue");
   this.keyEditDialogEasing = document.getElementById("keyEditDialogEasing");
   this.keyEditDialogOK = document.getElementById("keyEditDialogOK");
   this.keyEditDialogCancel = document.getElementById("keyEditDialogCancel");
   this.keyEditDialogDelete = document.getElementById("keyEditDialogDelete");
-
+    
   var self = this;
 
   this.keyEditDialogOK.addEventListener('click', function() {
@@ -893,6 +904,13 @@ Timeline.prototype.save = function() {
   localStorage["timeline.js.settings.canvasHeight"] = this.canvasHeight;
   localStorage["timeline.js.settings.timeScale"] = this.timeScale;
   localStorage["timeline.js.data." + this.name] = JSON.stringify(data);
+
+
+  //this is just for debugging / development
+  jsonStorage["canvasHeight"] = this.canvasHeight;
+  jsonStorage["timeScale"] = this.timeScale;
+  jsonStorage["data"] = data;
+  editor.set(jsonStorage);
 };
 
 Timeline.prototype.load = function() {
@@ -926,3 +944,18 @@ Timeline.prototype.load = function() {
     }
   }
 };
+$('.clearLocalStorage').click(function(){
+  localStorage.clear();
+  console.log("Storage Cleared");
+});
+$('.timelineFullWidth').click(function(){
+  timelineTarget.removeClass( "col-sm-8" );
+  timelineTarget.addClass( "col-sm-12" );
+  console.log("col-sm-12");
+});
+$('.timelinePartialWidth').click(function(){
+  timelineTarget.removeClass( "col-sm-12" );
+  timelineTarget.addClass( "col-sm-8" );
+  console.log("col-sm-8");
+});
+
